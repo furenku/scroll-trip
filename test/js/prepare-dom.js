@@ -8,7 +8,9 @@ $(document).ready(function(){
    levelModel = $('.level').first()
 
    for (var i = 0; i < 5; i++) {
-      levelModel.clone().detach().appendTo('#travel')
+      newLevel = levelModel.clone().detach().appendTo('#travel')
+      newLevel.find('.child').first().html( 'Level' + i )
+
    }
 
 
@@ -18,6 +20,10 @@ $(document).ready(function(){
 
    totalWidth = $(window).width()
    totalHeight = $(window).height()
+
+   $('html, body').css({
+      overflow: 'hidden'
+   })
 
    travelContainer.css({
       position: 'absolute',
@@ -29,12 +35,13 @@ $(document).ready(function(){
 
    levelTop = 0
 
-   travelContainer.find('.level').each(function(){
+   travelContainer.find('.level').each(function(i){
 
       $(this).css({
          position: 'absolute',
          left: 0,
          top: levelTop,
+         backgroundColor: 'rgba(255,'+(50*i)+','+(250-(50*i))+',1)',
          transition : 'top 1s ease-in-out, left 1s ease-in-out',
          WebkitTransition : 'top 1s ease-in-out, left 1s ease-in-out',
          MozTransition    : 'top 1s ease-in-out, left 1s ease-in-out',
@@ -44,7 +51,7 @@ $(document).ready(function(){
       })
 
       levelTop += $(this).outerHeight()
-      
+
    })
 
 

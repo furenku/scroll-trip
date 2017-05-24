@@ -9,6 +9,8 @@ gotMouseWheel = false
 lastScrollTop = 0
 scrollAmount = 0
 
+moving = false
+
 levels = []
 
 currentLevel = 0
@@ -131,66 +133,80 @@ function setupUserActions() {
 
 function scrollTravel( travelDirection ) {
 
-   if( travelDirection === "down" || travelDirection === "right" ) {
+   if( ! moving ) {
 
-      nextChild = currentChild + 1
 
-      if( nextChild >= levels[currentLevel].children.length ) {
+      if( travelDirection === "down" || travelDirection === "right" ) {
 
-         nextLevel = currentLevel + 1
+         nextChild = currentChild + 1
 
-         nextLevel = Math.min( nextLevel, levels.length - 1 )
+         if( nextChild >= levels[currentLevel].children.length ) {
 
-         nextChild = 0
+            nextLevel = currentLevel + 1
+
+            nextLevel = Math.min( nextLevel, levels.length - 1 )
+
+            if( nextLevel !== levels.length - 1 ) nextChild = 0
+
+         }
+
+      } else {
+
+         nextChild = currentChild - 1
+
+         if( nextChild < 0 ) {
+
+            nextLevel = currentLevel - 1
+
+            nextLevel = Math.max( nextLevel, 0 )
+
+            if( currentLevel !== 0 ) {
+
+               nextChild = levels[nextLevel].children.length - 1
+
+            } else {
+
+               nextChild = 0
+
+            }
+
+         }
 
       }
 
-   } else {
+      // if( currentLevel !== nextLevel ) {
 
-      nextChild = currentChild - 1
+      scrollTo( nextLevel, nextChild )
 
-      if( nextChild < 0 ) {
+      // }
 
-         nextLevel = currentLevel - 1
-
-         nextLevel = Math.max( nextLevel, 0 )
-
-         nextChild = levels[nextLevel].children.length - 1
-
-      }
+      console.log( nextLevel, nextChild )
 
    }
-
-
-   scrollTo( nextLevel, nextChild )
-
-
-
-   console.log( nextLevel, nextChild )
 
 }
 
 
 function scrollTo( level, child ) {
 
+   moving = true
 
-   if( level > currentLevel ) {
+   if( level === currentLevel ) {
+      levelWait = 0
+   } else {
 
-      levels[currentLevel].level.css({
-         top: - $(window).height()
-      })
+      levelWait = 1
 
-   }
-
-   if( level < currentLevel ) {
-
-      levels[currentLevel].level.css({
-         top: $(window).height()
-      })
+      for (var i = 0; i < levels.length; i++) {
+         levels[i].level.css({
+            top: (i - level) * $(window).height()
+         })
+      }
 
    }
 
    childLeft = levels[level].children[child].left
+
    childWidth = levels[level].children[child].width
 
    offsetLeft = childLeft
@@ -203,22 +219,29 @@ function scrollTo( level, child ) {
    }
 
    if( child >= levels[level].children.length - 1 ) {
-   
+
       offsetLeft = childLeft - childWidth
 
    }
 
-   levels[level].level.css({
-      top: 0,
-      left: - offsetLeft,
-   })
+   // levels[level].level.css({
+   //    top: 0
+   // })
 
    setTimeout(function(){
 
       currentLevel = level
-      currentChild = child
 
-   }, 1000)
+      levels[level].level.css({
+         left: - offsetLeft
+      })
+
+      setTimeout(function(){
+         currentChild = child
+         moving = false
+      }, 1000)
+
+   }, levelWait * 1000)
 
 
 }
