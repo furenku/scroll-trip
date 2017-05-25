@@ -54,6 +54,8 @@ function setupUserActions() {
 
    travelContainer.on("pointerdown", function(event) {
 
+      console.log("pointerdown")
+
       startedDrag = true
 
       startY = event.pageY
@@ -63,6 +65,7 @@ function setupUserActions() {
 
    travelContainer.on("pointermove", function(event) {
 
+      console.log("pointermove")
       if (startedDrag) draggingPointer = true
 
    })
@@ -70,6 +73,7 @@ function setupUserActions() {
 
    travelContainer.on("pointerup", function(event) {
 
+      console.log("pointerup")
 
       if (draggingPointer && startedDrag) {
 

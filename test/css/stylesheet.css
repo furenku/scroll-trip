@@ -5,8 +5,8 @@ body, html {
   height: 100%;
   font-family: Arial, Helvetica; }
 
-body {
-  overflow-y: hidden; }
+#travel, body, html {
+  overflow: hidden; }
 
 * {
   outline: 1px solid #0bc1ed; }
