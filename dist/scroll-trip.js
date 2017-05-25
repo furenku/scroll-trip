@@ -15,8 +15,13 @@ levels = []
 
 currentLevel = 0
 currentChild = 0
-nextLevel = 0
+
 nextChild = 0
+nextLevel = 0
+
+
+
+scrollEnd = false
 
 $(document).ready(function(){
 
@@ -39,10 +44,6 @@ function goToNext() {
 
 
 function setupUserActions() {
-
-
-
-
 
 
    travelContainer.on("pointerdown", function(event) {
@@ -81,7 +82,6 @@ function setupUserActions() {
             if (direction > 0) travelDirection = "right"
          }
 
-         console.log(travelDirection)
 
          scrollTravel( travelDirection )
          // scrollTravel()
@@ -112,9 +112,11 @@ function setupUserActions() {
                travelDirection = "up"
             }
 
+            scrollTravel( travelDirection )
+
             isScrolling = false
 
-         }, 150)
+         }, 50)
 
          gotMouseWheel = setTimeout(function() {
             gotMouseWheel = false
@@ -144,13 +146,26 @@ function scrollTravel( travelDirection ) {
 
             nextLevel = currentLevel + 1
 
-            nextLevel = Math.min( nextLevel, levels.length - 1 )
+            if( nextLevel < levels.length ){
 
-            if( nextLevel !== levels.length - 1 ) nextChild = 0
+               nextLevel = Math.min( nextLevel, levels.length - 1 )
+
+               // if( nextLevel !== levels.length - 1 ) {
+               nextChild = 0
+               // }
+
+            } else {
+
+               nextLevel = Math.min( nextLevel, levels.length - 1 )
+               scrollEnd = true
+
+            }
 
          }
 
       } else {
+
+         scrollEnd = false
 
          nextChild = currentChild - 1
 
@@ -174,20 +189,23 @@ function scrollTravel( travelDirection ) {
 
       }
 
-      // if( currentLevel !== nextLevel ) {
+      if( ! scrollEnd ) {
 
       scrollTo( nextLevel, nextChild )
 
-      // }
+      }
 
-      console.log( nextLevel, nextChild )
 
    }
+
+
 
 }
 
 
 function scrollTo( level, child ) {
+
+   thisLevel = levels[level]
 
    moving = true
 
@@ -195,19 +213,23 @@ function scrollTo( level, child ) {
       levelWait = 0
    } else {
 
+
       levelWait = 1
 
       for (var i = 0; i < levels.length; i++) {
+
          levels[i].level.css({
             top: (i - level) * $(window).height()
          })
+
       }
 
    }
 
-   childLeft = levels[level].children[child].left
 
-   childWidth = levels[level].children[child].width
+   childLeft = thisLevel.children[child].left
+
+   childWidth = thisLevel.children[child].width
 
    offsetLeft = childLeft
 
@@ -218,7 +240,7 @@ function scrollTo( level, child ) {
 
    }
 
-   if( child >= levels[level].children.length - 1 ) {
+   if( child >= thisLevel.children.length - 1 ) {
 
       offsetLeft = childLeft - childWidth
 
@@ -230,23 +252,46 @@ function scrollTo( level, child ) {
 
    setTimeout(function(){
 
-      currentLevel = level
 
-      levels[level].level.css({
+      thisLevel.level.css({
          left: - offsetLeft
       })
 
-      setTimeout(function(){
-         currentChild = child
-         moving = false
-      }, 1000)
+      if( child !== thisLevel.currentChild ){
+
+         setTimeout(function(){
+
+            setScrollData(level,child)
+
+         }, 1000)
+
+      } else {
+
+         setScrollData(level,child)
+
+      }
 
    }, levelWait * 1000)
 
+   nextLevel = level
+   nextChild = child
+
+   return
 
 }
 
 
+function setScrollData(level,child) {
+
+   currentLevel = level
+
+   currentChild = child
+
+   thisLevel.currentChild = child
+
+   moving = false
+
+}
 
 function makeStructure() {
 
@@ -254,7 +299,7 @@ function makeStructure() {
 
       level = $(this)
 
-      lastLevel = {
+      newLevel = {
          level: level,
          width: level.width()
       }
@@ -277,9 +322,11 @@ function makeStructure() {
 
       })
 
-      lastLevel.children = children
+      newLevel.children = children
 
-      levels.push( lastLevel )
+      newLevel.currentChild = 0
+
+      levels.push( newLevel )
 
    })
 

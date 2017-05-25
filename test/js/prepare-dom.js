@@ -7,7 +7,7 @@ $(document).ready(function(){
 
    levelModel = $('.level').first()
 
-   for (var i = 0; i < 5; i++) {
+   for (var i = 0; i < 4; i++) {
       newLevel = levelModel.clone().detach().appendTo('#travel')
       newLevel.find('.child').first().html( 'Level' + i )
 
