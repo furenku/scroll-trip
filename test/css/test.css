@@ -1,0 +1,11 @@
+.level {
+  width: 450vw; }
+  .level .child {
+    text-align: center;
+    padding: 45vh 0; }
+    .level .child:nth-child(even) {
+      width: 50vw; }
+    .level .child:nth-child(odd) {
+      width: 100vw; }
+
+/*# sourceMappingURL=test.css.map */

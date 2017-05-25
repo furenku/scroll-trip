@@ -1,0 +1,19 @@
+.level {
+
+   width: 450vw;
+
+   .child {
+
+      text-align: center;
+      padding: 45vh 0;
+
+      &:nth-child(even) {
+         width: 50vw;
+      }
+      &:nth-child(odd) {
+         width: 100vw;
+      }
+
+   }
+
+}
