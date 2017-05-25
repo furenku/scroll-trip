@@ -1,4 +1,3 @@
-travelContainer = $('#travel')
 
 travelDirection = undefined
 gotMouseWheel = false
@@ -35,6 +34,41 @@ $(document).ready(function(){
 
    })
 
+   travelContainer = $('#travel')
+
+
+   totalWidth = $(window).width()
+   totalHeight = $(window).height()
+
+   travelContainer.css({
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: totalWidth,
+      height: totalHeight
+   })
+
+   levelTop = 0
+
+   travelContainer.find('.level').each(function(i){
+
+      $(this).css({
+         position: 'absolute',
+         left: 0,
+         top: levelTop,
+         backgroundColor: 'rgba(255,'+(50*i)+','+(250-(50*i))+',1)',
+         transition : 'top 1s ease-in-out, left 1s ease-in-out',
+         WebkitTransition : 'top 1s ease-in-out, left 1s ease-in-out',
+         MozTransition    : 'top 1s ease-in-out, left 1s ease-in-out',
+         MsTransition     : 'top 1s ease-in-out, left 1s ease-in-out',
+         OTransition      : 'top 1s ease-in-out, left 1s ease-in-out',
+         transition       : 'top 1s ease-in-out, left 1s ease-in-out'
+      })
+
+      levelTop += $(this).outerHeight()
+
+   })
+
    console.log("Scroll Trip ready")
 
 })
@@ -54,7 +88,6 @@ function setupUserActions() {
 
    travelContainer.on("pointerdown", function(event) {
 
-      console.log("pointerdown")
 
       startedDrag = true
 
@@ -65,7 +98,6 @@ function setupUserActions() {
 
    travelContainer.on("pointermove", function(event) {
 
-      console.log("pointermove")
       if (startedDrag) draggingPointer = true
 
    })
@@ -73,7 +105,6 @@ function setupUserActions() {
 
    travelContainer.on("pointerup", function(event) {
 
-      console.log("pointerup")
 
       if (draggingPointer && startedDrag) {
 
