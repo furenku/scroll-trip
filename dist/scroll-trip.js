@@ -1,3 +1,4 @@
+travelContainer = $('#travel')
 
 travelDirection = undefined
 gotMouseWheel = false
@@ -34,7 +35,6 @@ $(document).ready(function(){
 
    })
 
-   travelContainer = $('#travel')
 
 
    totalWidth = $(window).width()
