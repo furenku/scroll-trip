@@ -19,7 +19,7 @@ currentChild = 0
 nextChild = 0
 nextLevel = 0
 
-
+callbacks = []
 
 scrollEnd = false
 
@@ -28,6 +28,12 @@ $(document).ready(function(){
    makeStructure()
 
    setupUserActions()
+
+   add_callback( "simple-log", function(level, child){
+
+      console.log("Scrolled To:", level, child )
+
+   })
 
    console.log("Scroll Trip ready")
 
@@ -261,13 +267,14 @@ function scrollTo( level, child ) {
 
          setTimeout(function(){
 
-            setScrollData(level,child)
+            do_callbacks(level,child)
 
          }, 1000)
 
       } else {
 
-         setScrollData(level,child)
+         do_callbacks(level,child)
+
 
       }
 
@@ -330,4 +337,21 @@ function makeStructure() {
 
    })
 
+}
+
+
+function do_callbacks(level,child) {
+
+   setScrollData(level,child)
+
+   for( i in callbacks ) {
+
+      callbacks[i](level,child)
+
+   }
+
+}
+
+function add_callback( name, callback ) {
+   callbacks[name] = callback
 }
