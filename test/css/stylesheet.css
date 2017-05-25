@@ -14,13 +14,13 @@ body, html {
 .level {
   width: 450vw; }
   .level, .level .child {
+    box-sizing: border-box;
     display: inline-block; }
   .level .child {
     float: left;
     height: 100vh;
     text-align: center;
-    padding: 45vh 0;
-    box-sizing: border-box; }
+    padding: 45vh 0; }
     .level .child:nth-child(even) {
       width: 50vw; }
     .level .child:nth-child(odd) {

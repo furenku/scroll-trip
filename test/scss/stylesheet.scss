@@ -18,7 +18,9 @@ body, html {
 .level {
 
    width: 450vw;
+
    &,.child {
+      box-sizing: border-box;
       display: inline-block;
    }
 
@@ -28,7 +30,6 @@ body, html {
       height: 100vh;
       text-align: center;
       padding: 45vh 0;
-      box-sizing: border-box;
 
       &:nth-child(even) {
          width: 50vw;
